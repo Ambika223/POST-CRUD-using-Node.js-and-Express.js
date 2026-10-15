@@ -87,7 +87,7 @@ app.post('/api/posts', (req, res) => {
     try {
         let data = req.body;
         if (!data.title || !data.body) {
-            return res.status(404).json({
+            return res.status(400).json({
                 success: false,
                 message: `title and content are required failed`
             })
@@ -101,7 +101,7 @@ app.post('/api/posts', (req, res) => {
             updatedAt: null
         }
         post.unshift(new_post);
-        res.status(200).json({
+        res.status(201).json({
             success: true,
             data: new_post,
             message: `The post with id ${new_post.id} created successfully`
@@ -120,17 +120,6 @@ app.post('/api/posts', (req, res) => {
 app.patch('/api/posts/:id', (req, res) => {
     try {
         let updateId = req.params.id;
-
-        let obj = post.find(ele => ele.id === updateId);
-
-
-        let update_post = {
-            ...obj,
-            ...req.body,
-            updatedAt: Date.now(),
-            id: updateId
-        }
-        // let { userId, title, body } = req.body;
         let getIndex = post.findIndex(post => post.id === updateId);
         if (getIndex === -1) {
             return res.status(404).json({
@@ -138,6 +127,17 @@ app.patch('/api/posts/:id', (req, res) => {
                 message: `The post with id ${updateId} is not found`
             })
         }
+        // let obj = post.find(ele => ele.id === updateId);
+
+        // let { userId, title, body } = req.body;
+
+        let update_post = {
+            ...post[getIndex],
+            ...req.body,
+            updatedAt: Date.now(),
+            id: updateId
+        }
+
         post[getIndex] = update_post;
 
         res.status(200).json({

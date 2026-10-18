@@ -40,20 +40,18 @@ app.get('/api/posts', (req, res) => {
     try {
         res.status(200).json({
             data: post,
-            success: true
+            success: true,
+            message: "data fetced successfully"
         })
     }
     catch (err) {
         res.status(500).json({
-            data: post,
             success: false,
             message: `Error while fetching posts`,
             error: err.message
         })
     }
 })
-
-
 
 //GET SINGLE
 app.get('/api/posts/:id', (req, res) => {
